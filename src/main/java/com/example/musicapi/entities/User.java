@@ -1,4 +1,4 @@
-package com.example.musicapi.entity;
+package com.example.musicapi.entities;
 
 import jakarta.persistence.*;
 import lombok.*;

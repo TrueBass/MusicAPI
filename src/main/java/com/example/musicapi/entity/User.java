@@ -24,7 +24,7 @@ public class User {
     @Column(nullable = false)
     String email;
 
-    int socialCredit;
-    boolean is_admin;
-    boolean isBanned;
+    int socialCredit = 0;
+    boolean isAdmin = false;
+    boolean isBanned = false;
 }

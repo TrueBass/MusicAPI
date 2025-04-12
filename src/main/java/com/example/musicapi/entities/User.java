@@ -3,6 +3,8 @@ package com.example.musicapi.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name="users")
 @Setter
@@ -27,4 +29,7 @@ public class User {
     int socialCredit = 0;
     boolean isAdmin = false;
     boolean isBanned = false;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<Playlist> playlists;
 }

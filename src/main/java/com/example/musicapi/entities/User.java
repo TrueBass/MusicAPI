@@ -27,4 +27,7 @@ public class User {
     int socialCredit = 0;
     boolean isAdmin = false;
     boolean isBanned = false;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private RefreshToken refreshToken;
 }

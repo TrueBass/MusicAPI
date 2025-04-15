@@ -21,6 +21,6 @@ public class RefreshToken {
     Date createdAt;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_refresh_token_user"))
     private User user;
 }

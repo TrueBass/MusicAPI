@@ -1,10 +1,7 @@
 package com.example.musicapi.entities;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.Duration;
 import java.util.Date;
 import java.util.Set;
 
@@ -18,7 +15,7 @@ import java.util.Set;
 public class Playlist {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @Column(nullable = false)
     private String title;

@@ -2,12 +2,7 @@ package com.example.musicapi.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.antlr.v4.runtime.misc.NotNull;
-
-import java.sql.Blob;
-import java.time.Duration;
 import java.util.Date;
-import java.util.Set;
 
 @Entity
 @Table(name="songs")

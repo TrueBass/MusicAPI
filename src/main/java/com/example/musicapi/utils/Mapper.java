@@ -40,6 +40,7 @@ public final class Mapper {
                 .author(dto.author())
                 .duration(dto.duration())
                 .data(dto.data())
+                .genre(dto.genre())
                 .build();
     }
 
@@ -52,6 +53,7 @@ public final class Mapper {
                 song.getLikes(),
                 song.getData(),
                 song.getDuration(),
+                song.getGenre(),
                 song.getPlaylist().getId());
     }
 }

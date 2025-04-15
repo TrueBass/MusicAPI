@@ -1,5 +1,6 @@
 package com.example.musicapi.entities;
 
+import com.example.musicapi.enums.MusicGenre;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.Date;
@@ -33,6 +34,10 @@ public class Song {
 
     @Column(nullable = false)
     private Long duration;
+
+    @Enumerated(EnumType.ORDINAL)
+    @Column(nullable = false)
+    private MusicGenre genre = MusicGenre.OTHER;
 
     @ManyToOne
     @JoinColumn(name = "playlist_id", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(name = "fk_songs_playlist"))

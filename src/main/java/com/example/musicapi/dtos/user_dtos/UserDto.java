@@ -1,4 +1,4 @@
-package com.example.musicapi.dtos;
+package com.example.musicapi.dtos.user_dtos;
 
 
 import lombok.*;

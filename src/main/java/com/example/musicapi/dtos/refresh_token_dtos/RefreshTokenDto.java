@@ -1,4 +1,4 @@
-package com.example.musicapi.dtos;
+package com.example.musicapi.dtos.refresh_token_dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

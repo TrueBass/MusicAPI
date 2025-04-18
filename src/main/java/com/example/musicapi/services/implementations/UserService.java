@@ -4,18 +4,21 @@ import com.example.musicapi.dtos.refresh_token_dtos.RefreshTokenDto;
 import com.example.musicapi.dtos.user_dtos.UserAuthDto;
 import com.example.musicapi.dtos.user_dtos.UserDto;
 import com.example.musicapi.dtos.user_dtos.UserLoginDto;
-import com.example.musicapi.entities.RefreshToken;
 import com.example.musicapi.entities.User;
 import com.example.musicapi.exceptions.InvalidPasswordException;
 import com.example.musicapi.exceptions.NotFoundException;
 import com.example.musicapi.repositories.IRefreshTokenRepository;
-import com.example.musicapi.entities.User;
 import com.example.musicapi.exceptions.AlreadyExistsException;
 import com.example.musicapi.repositories.IUserRepository;
+import com.example.musicapi.services.definitions.IRefreshTokenService;
 import com.example.musicapi.services.definitions.IUserService;
-import com.example.musicapi.utils.JwtUtils;
+import com.example.musicapi.utils.JwtProvider;
 import com.example.musicapi.utils.Mapper;
 import lombok.AllArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +29,12 @@ import java.util.regex.Pattern;
 @AllArgsConstructor
 public class UserService implements IUserService {
     private IUserRepository userRepository;
-    private IRefreshTokenRepository refreshTokenRepository;
-    private JwtUtils jwtUtils;
+    private JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
+    private final IRefreshTokenService refreshTokenService;
+
+    private CustomUserDetailsService customUserDetailsService;
+    private AuthenticationManager authenticationManager;
 
     private final Pattern EMAIL_PATTERN = Pattern.compile("^[\\w-]+@([\\w-]+\\.)+[\\w-]{2,4}$");
 
@@ -77,11 +83,13 @@ public class UserService implements IUserService {
             throw new InvalidPasswordException("Invalid password provided");
         }
 
-        //TODO Generate access and refresh tokens using JwtUtils with User object
-        //TODO Save refresh token in DB
-        //TODO Save one-to-one relationship between user and new refresh_token
-        //TODO Return new RefreshTokenDto
-        
-        return null;
+        var authToken = new UsernamePasswordAuthenticationToken(user.get().getUsername(), userLoginDto.getPassword());
+        Authentication auth = authenticationManager.authenticate(authToken);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
+        String accessToken = jwtProvider.generateToken(auth);
+        String refreshToken = refreshTokenService.createRefreshToken(user.get()).getToken();
+
+        return new RefreshTokenDto(accessToken, "Bearer", refreshToken);
     }
 }

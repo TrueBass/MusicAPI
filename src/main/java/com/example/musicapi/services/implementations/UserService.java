@@ -1,12 +1,19 @@
 package com.example.musicapi.services.implementations;
 
+import com.example.musicapi.dtos.refresh_token_dtos.RefreshTokenDto;
 import com.example.musicapi.dtos.user_dtos.UserAuthDto;
 import com.example.musicapi.dtos.user_dtos.UserDto;
 import com.example.musicapi.dtos.user_dtos.UserLoginDto;
+import com.example.musicapi.entities.RefreshToken;
+import com.example.musicapi.entities.User;
+import com.example.musicapi.exceptions.InvalidPasswordException;
+import com.example.musicapi.exceptions.NotFoundException;
+import com.example.musicapi.repositories.IRefreshTokenRepository;
 import com.example.musicapi.entities.User;
 import com.example.musicapi.exceptions.AlreadyExistsException;
 import com.example.musicapi.repositories.IUserRepository;
 import com.example.musicapi.services.definitions.IUserService;
+import com.example.musicapi.utils.JwtUtils;
 import com.example.musicapi.utils.Mapper;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +26,8 @@ import java.util.regex.Pattern;
 @AllArgsConstructor
 public class UserService implements IUserService {
     private IUserRepository userRepository;
+    private IRefreshTokenRepository refreshTokenRepository;
+    private JwtUtils jwtUtils;
     private final PasswordEncoder passwordEncoder;
 
     private final Pattern EMAIL_PATTERN = Pattern.compile("^[\\w-]+@([\\w-]+\\.)+[\\w-]{2,4}$");
@@ -51,7 +60,28 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserDto loginUser(UserLoginDto userDto) {
+    public RefreshTokenDto loginUser(UserLoginDto userLoginDto) {
+        var usernameOrEmail = userLoginDto.getEmailOrUsername();
+
+        Optional<User> user;
+        if (EMAIL_PATTERN.matcher(usernameOrEmail).matches()) {
+            user = userRepository.findByEmail(usernameOrEmail);
+        } else {
+            user = userRepository.findByUsername(usernameOrEmail);
+        }
+
+        if (user.isEmpty()) {
+            throw new NotFoundException("User with the specified email/username is not found");
+        }
+        if (!passwordEncoder.matches(userLoginDto.getPassword(), user.get().getPassword())) {
+            throw new InvalidPasswordException("Invalid password provided");
+        }
+
+        //TODO Generate access and refresh tokens using JwtUtils with User object
+        //TODO Save refresh token in DB
+        //TODO Save one-to-one relationship between user and new refresh_token
+        //TODO Return new RefreshTokenDto
+        
         return null;
     }
 }

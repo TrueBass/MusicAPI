@@ -5,8 +5,11 @@ import com.example.musicapi.dtos.playlist_dtos.UpdatePlaylistDto;
 import com.example.musicapi.dtos.song_dtos.CreateSongDto;
 import com.example.musicapi.dtos.playlist_dtos.PlaylistDto;
 import com.example.musicapi.dtos.song_dtos.SongDto;
+import com.example.musicapi.dtos.user_dtos.UserAuthDto;
+import com.example.musicapi.dtos.user_dtos.UserDto;
 import com.example.musicapi.entities.Playlist;
 import com.example.musicapi.entities.Song;
+import com.example.musicapi.entities.User;
 
 public final class Mapper {
     public static Playlist MapToPlaylist(CreatePlaylistDto dto) {
@@ -55,5 +58,35 @@ public final class Mapper {
                 song.getDuration(),
                 song.getGenre(),
                 song.getPlaylist().getId());
+    }
+
+    public static UserDto MapToUserDto(User user){
+        return new UserDto(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getSocialCredit(),
+                user.isAdmin(),
+                user.isBanned()
+        );
+    }
+
+    public static User MapToUser(UserDto userDto){
+        return User.builder()
+                .id(userDto.getId())
+                .username(userDto.getUsername())
+                .email(userDto.getEmail())
+                .socialCredit(userDto.getSocialCredit())
+                .isAdmin(userDto.isAdmin())
+                .isBanned(userDto.isBanned())
+                .build();
+    }
+
+    public static User MapToUser(UserAuthDto userAuthDto){
+        return User.builder()
+                .username(userAuthDto.getUsername())
+                .email(userAuthDto.getEmail())
+                .password(userAuthDto.getPassword())
+                .build();
     }
 }

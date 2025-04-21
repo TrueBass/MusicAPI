@@ -29,19 +29,17 @@ public class RefreshTokenService implements IRefreshTokenService {
     }
 
     public RefreshToken createRefreshToken(User user) {
-        RefreshToken refreshToken = new RefreshToken();
         Date currentDate = new Date();
         Date expirationDate = new Date(currentDate.getTime() + refreshTokenExpirationMs);
+        var oldRefreshToken = refreshTokenRepository.findByUser(user);
 
+        var refreshToken = oldRefreshToken.orElseGet(RefreshToken::new);
         refreshToken.setUser(user);
         refreshToken.setCreatedAt(currentDate);
         refreshToken.setExpiresOn(expirationDate);
         refreshToken.setToken(UUID.randomUUID().toString());
-
-        var oldRefreshToken = refreshTokenRepository.findByUser(user);
-        oldRefreshToken.ifPresent(token -> refreshTokenRepository.delete(token));
-
         refreshToken = refreshTokenRepository.save(refreshToken);
+
         return refreshToken;
     }
 

@@ -4,21 +4,25 @@ import com.example.musicapi.dtos.refresh_token_dtos.RefreshTokenDto;
 import com.example.musicapi.dtos.user_dtos.UserAuthDto;
 import com.example.musicapi.dtos.user_dtos.UserDto;
 import com.example.musicapi.dtos.user_dtos.UserLoginDto;
+import com.example.musicapi.entities.Role;
 import com.example.musicapi.entities.User;
 import com.example.musicapi.exceptions.InvalidPasswordException;
 import com.example.musicapi.exceptions.NotFoundException;
 import com.example.musicapi.repositories.IRefreshTokenRepository;
 import com.example.musicapi.exceptions.AlreadyExistsException;
+import com.example.musicapi.repositories.IRoleRepository;
 import com.example.musicapi.repositories.IUserRepository;
 import com.example.musicapi.services.definitions.IRefreshTokenService;
 import com.example.musicapi.services.definitions.IUserService;
 import com.example.musicapi.utils.JwtProvider;
 import com.example.musicapi.utils.Mapper;
 import lombok.AllArgsConstructor;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +33,7 @@ import java.util.regex.Pattern;
 @AllArgsConstructor
 public class UserService implements IUserService {
     private IUserRepository userRepository;
+    private IRoleRepository roleRepository;
     private JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
     private final IRefreshTokenService refreshTokenService;
@@ -39,7 +44,7 @@ public class UserService implements IUserService {
     private final Pattern EMAIL_PATTERN = Pattern.compile("^[\\w-]+@([\\w-]+\\.)+[\\w-]{2,4}$");
 
     @Override
-    public UserDto registerUser(UserAuthDto userAuthDto) {
+    public RefreshTokenDto registerUser(UserAuthDto userAuthDto) {
         Optional<User> userFoundByEmail = userRepository.findByEmail(userAuthDto.getEmail());
         if(userFoundByEmail.isPresent()) {
             throw new AlreadyExistsException(
@@ -50,19 +55,28 @@ public class UserService implements IUserService {
         Optional<User> userFoundByUsername = userRepository.findByUsername(userAuthDto.getUsername());
         if(userFoundByUsername.isPresent()) {
             throw new AlreadyExistsException(
-                    String.format(
-                            "User with username %s already exists",
-                            userAuthDto.getUsername()
-                    )
+                    String.format("User with username %s already exists", userAuthDto.getUsername())
             );
         }
 
         User newUser = Mapper.MapToUser(userAuthDto);
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
 
+        Role defaultRole = roleRepository.findByName("USER").orElseThrow(
+                () -> new RuntimeException("Default role 'USER' not found")
+        );
+        newUser.getRoles().add(defaultRole);
+
         User savedUser = userRepository.save(newUser);
 
-        return Mapper.MapToUserDto(savedUser);
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(savedUser.getUsername());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String accessToken = jwtProvider.generateToken(authentication);
+        String refreshToken = refreshTokenService.createRefreshToken(savedUser).getToken();
+
+        return new RefreshTokenDto(accessToken, "Bearer", refreshToken);
     }
 
     @Override

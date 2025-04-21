@@ -6,7 +6,7 @@ import com.example.musicapi.dtos.user_dtos.UserDto;
 import com.example.musicapi.dtos.user_dtos.UserLoginDto;
 
 public interface IUserService {
-    UserDto registerUser(UserAuthDto userDto);
+    RefreshTokenDto registerUser(UserAuthDto userDto);
 
     ResponseTokenDto loginUser(UserLoginDto userDto);
 

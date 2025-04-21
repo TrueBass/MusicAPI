@@ -11,6 +11,8 @@ import com.example.musicapi.entities.Playlist;
 import com.example.musicapi.entities.Song;
 import com.example.musicapi.entities.User;
 
+import java.util.HashSet;
+
 public final class Mapper {
     public static Playlist MapToPlaylist(CreatePlaylistDto dto) {
         return Playlist.builder()
@@ -87,6 +89,7 @@ public final class Mapper {
                 .username(userAuthDto.getUsername())
                 .email(userAuthDto.getEmail())
                 .password(userAuthDto.getPassword())
+                .roles(new HashSet<>())
                 .build();
     }
 }

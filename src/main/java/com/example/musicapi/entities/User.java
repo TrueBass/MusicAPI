@@ -41,6 +41,14 @@ public class User implements UserDetails {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private RefreshToken refreshToken;
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
+            foreignKey = @ForeignKey(name="fk_userroles_user"),
+            inverseForeignKey = @ForeignKey(name="fk_userroles_role"))
+    private Set<Role> roles = new HashSet<>();
+
     @Override
     public boolean isAccountNonLocked() {
         // locked functionality is not needed in this project.
@@ -60,7 +68,7 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // At this moment roles is represented as 'boolean' is admin.
-        // TODO: Implement normal use management
+        // TODO: Implement normal role management
         return List.of();
     }
 
@@ -69,12 +77,4 @@ public class User implements UserDetails {
         // account expiration functionality is not needed in this project.
         return true;
     }
-
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
-            foreignKey = @ForeignKey(name="fk_userroles_user"),
-            inverseForeignKey = @ForeignKey(name="fk_userroles_role"))
-    private Set<Role> roles = new HashSet<>();
 }

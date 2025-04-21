@@ -2,7 +2,6 @@ package com.example.musicapi.controllers;
 
 import com.example.musicapi.dtos.refresh_token_dtos.RefreshTokenDto;
 import com.example.musicapi.dtos.user_dtos.UserAuthDto;
-import com.example.musicapi.dtos.user_dtos.UserDto;
 import com.example.musicapi.dtos.refresh_token_dtos.ResponseTokenDto;
 import com.example.musicapi.dtos.user_dtos.UserLoginDto;
 import com.example.musicapi.services.implementations.UserService;
@@ -27,7 +26,7 @@ public class UserController {
     }
     
     @PostMapping("/signup")
-    public ResponseEntity<RefreshTokenDto> signup(@RequestBody UserAuthDto userDto) {
+    public ResponseEntity<ResponseTokenDto> signup(@RequestBody UserAuthDto userDto) {
         var token = userService.registerUser(userDto);
         return new ResponseEntity<>(token, HttpStatus.CREATED);
     }

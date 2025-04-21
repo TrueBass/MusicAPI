@@ -2,7 +2,6 @@ package com.example.musicapi.services.implementations;
 
 import com.example.musicapi.dtos.refresh_token_dtos.ResponseTokenDto;
 import com.example.musicapi.dtos.user_dtos.UserAuthDto;
-import com.example.musicapi.dtos.user_dtos.UserDto;
 import com.example.musicapi.dtos.user_dtos.UserLoginDto;
 import com.example.musicapi.entities.Role;
 import com.example.musicapi.entities.User;
@@ -18,7 +17,6 @@ import com.example.musicapi.services.definitions.IUserService;
 import com.example.musicapi.utils.JwtProvider;
 import com.example.musicapi.utils.Mapper;
 import lombok.AllArgsConstructor;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -47,7 +45,7 @@ public class UserService implements IUserService {
     private final Pattern EMAIL_PATTERN = Pattern.compile("^[\\w-]+@([\\w-]+\\.)+[\\w-]{2,4}$");
 
     @Override
-    public RefreshTokenDto registerUser(UserAuthDto userAuthDto) {
+    public ResponseTokenDto registerUser(UserAuthDto userAuthDto) {
         Optional<User> userFoundByEmail = userRepository.findByEmail(userAuthDto.getEmail());
         if(userFoundByEmail.isPresent()) {
             throw new AlreadyExistsException(
@@ -79,7 +77,7 @@ public class UserService implements IUserService {
         String accessToken = jwtProvider.generateToken(authentication);
         String refreshToken = refreshTokenService.createRefreshToken(savedUser).getToken();
 
-        return new RefreshTokenDto(accessToken, "Bearer", refreshToken);
+        return new ResponseTokenDto(accessToken, "Bearer", refreshToken);
     }
 
     @Override

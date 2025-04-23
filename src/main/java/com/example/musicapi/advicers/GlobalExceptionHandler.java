@@ -4,6 +4,7 @@ package com.example.musicapi.advicers;
 import com.example.musicapi.exceptions.AlreadyExistsException;
 import com.example.musicapi.exceptions.InvalidPasswordException;
 import com.example.musicapi.exceptions.NotFoundException;
+import com.example.musicapi.exceptions.UnauthorizedException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -35,6 +36,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<String> handleNotFoundException(NotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND); // Status 404
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<String> handleUnauthorizedException(UnauthorizedException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED); // Status 404
     }
 
     @ExceptionHandler({

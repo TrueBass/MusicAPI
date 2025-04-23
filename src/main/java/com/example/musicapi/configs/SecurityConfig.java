@@ -42,7 +42,11 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/music-api/users/signup", "/music-api/users/login").permitAll()
+                        .requestMatchers(
+                                "/music-api/users/signup",
+                                "/music-api/users/login",
+                                "/music-api/users/refresh",
+                                "/music-api/users/logout").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());

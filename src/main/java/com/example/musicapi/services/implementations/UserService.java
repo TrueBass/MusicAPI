@@ -1,13 +1,13 @@
 package com.example.musicapi.services.implementations;
 
-import com.example.musicapi.dtos.refresh_token_dtos.RefreshTokenDto;
+import com.example.musicapi.dtos.refresh_token_dtos.ResponseTokenDto;
 import com.example.musicapi.dtos.user_dtos.UserAuthDto;
-import com.example.musicapi.dtos.user_dtos.UserDto;
 import com.example.musicapi.dtos.user_dtos.UserLoginDto;
 import com.example.musicapi.entities.Role;
 import com.example.musicapi.entities.User;
 import com.example.musicapi.exceptions.InvalidPasswordException;
 import com.example.musicapi.exceptions.NotFoundException;
+import com.example.musicapi.exceptions.UnauthorizedException;
 import com.example.musicapi.repositories.IRefreshTokenRepository;
 import com.example.musicapi.exceptions.AlreadyExistsException;
 import com.example.musicapi.repositories.IRoleRepository;
@@ -17,7 +17,6 @@ import com.example.musicapi.services.definitions.IUserService;
 import com.example.musicapi.utils.JwtProvider;
 import com.example.musicapi.utils.Mapper;
 import lombok.AllArgsConstructor;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,6 +25,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -37,6 +37,7 @@ public class UserService implements IUserService {
     private JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
     private final IRefreshTokenService refreshTokenService;
+    private final IRefreshTokenRepository refreshTokenRepository;
 
     private CustomUserDetailsService customUserDetailsService;
     private AuthenticationManager authenticationManager;
@@ -44,7 +45,7 @@ public class UserService implements IUserService {
     private final Pattern EMAIL_PATTERN = Pattern.compile("^[\\w-]+@([\\w-]+\\.)+[\\w-]{2,4}$");
 
     @Override
-    public RefreshTokenDto registerUser(UserAuthDto userAuthDto) {
+    public ResponseTokenDto registerUser(UserAuthDto userAuthDto) {
         Optional<User> userFoundByEmail = userRepository.findByEmail(userAuthDto.getEmail());
         if(userFoundByEmail.isPresent()) {
             throw new AlreadyExistsException(
@@ -76,11 +77,11 @@ public class UserService implements IUserService {
         String accessToken = jwtProvider.generateToken(authentication);
         String refreshToken = refreshTokenService.createRefreshToken(savedUser).getToken();
 
-        return new RefreshTokenDto(accessToken, "Bearer", refreshToken);
+        return new ResponseTokenDto(accessToken, "Bearer", refreshToken);
     }
 
     @Override
-    public RefreshTokenDto loginUser(UserLoginDto userLoginDto) {
+    public ResponseTokenDto loginUser(UserLoginDto userLoginDto) {
         var usernameOrEmail = userLoginDto.getEmailOrUsername();
 
         Optional<User> user;
@@ -99,11 +100,46 @@ public class UserService implements IUserService {
 
         var authToken = new UsernamePasswordAuthenticationToken(user.get().getUsername(), userLoginDto.getPassword());
         Authentication auth = authenticationManager.authenticate(authToken);
-        SecurityContextHolder.getContext().setAuthentication(auth);
+        return authenticateUser(user.get(), auth);
+    }
 
-        String accessToken = jwtProvider.generateToken(auth);
-        String refreshToken = refreshTokenService.createRefreshToken(user.get()).getToken();
+    @Override
+    public ResponseTokenDto refreshUser(String refreshToken) {
+        var existingToken = refreshTokenService.findByToken(refreshToken)
+                .orElseThrow(() -> new NotFoundException("Refresh token not found"));
 
-        return new RefreshTokenDto(accessToken, "Bearer", refreshToken);
+        if (existingToken.getExpiresOn().before(new Date())) {
+            refreshTokenRepository.delete(existingToken);
+            throw new UnauthorizedException("Refresh token expired");
+        }
+
+        var user = existingToken.getUser();
+        var userDetails = customUserDetailsService.loadUserByUsername(user.getUsername());
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                userDetails,
+                null,
+                userDetails.getAuthorities()
+        );
+
+        return authenticateUser(user, authentication);
+    }
+
+    @Override
+    public void logoutUser(String refreshToken) {
+        var existingToken = refreshTokenService.findByToken(refreshToken);
+        if (existingToken.isEmpty()) {
+            throw new NotFoundException("Refresh token not found");
+        }
+
+        refreshTokenRepository.delete(existingToken.get());
+    }
+
+    private ResponseTokenDto authenticateUser(User user, Authentication authentication) {
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String accessToken = jwtProvider.generateToken(authentication);
+        String refreshToken = refreshTokenService.createRefreshToken(user).getToken();
+
+        return new ResponseTokenDto(accessToken, "Bearer", refreshToken);
     }
 }

@@ -1,8 +1,8 @@
 package com.example.musicapi.controllers;
 
-import com.example.musicapi.dtos.user_dtos.UserAuthDto;
-import com.example.musicapi.dtos.user_dtos.UserDto;
 import com.example.musicapi.dtos.refresh_token_dtos.RefreshTokenDto;
+import com.example.musicapi.dtos.user_dtos.UserAuthDto;
+import com.example.musicapi.dtos.refresh_token_dtos.ResponseTokenDto;
 import com.example.musicapi.dtos.user_dtos.UserLoginDto;
 import com.example.musicapi.services.implementations.UserService;
 import lombok.AllArgsConstructor;
@@ -20,14 +20,26 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<RefreshTokenDto> login(@RequestBody UserLoginDto loginDto) {
+    public ResponseEntity<ResponseTokenDto> login(@RequestBody UserLoginDto loginDto) {
         var token = userService.loginUser(loginDto);
-        return new ResponseEntity<RefreshTokenDto>(token, HttpStatus.OK);
+        return new ResponseEntity<>(token, HttpStatus.OK);
     }
     
     @PostMapping("/signup")
-    public ResponseEntity<RefreshTokenDto> signup(@RequestBody UserAuthDto userDto) {
+    public ResponseEntity<ResponseTokenDto> signup(@RequestBody UserAuthDto userDto) {
         var token = userService.registerUser(userDto);
         return new ResponseEntity<>(token, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<ResponseTokenDto> refresh(@RequestBody RefreshTokenDto dto) {
+        var token = userService.refreshUser(dto.getRefreshToken());
+        return ResponseEntity.ok(token);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@RequestBody RefreshTokenDto dto) {
+        userService.logoutUser(dto.getRefreshToken());
+        return ResponseEntity.noContent().build();
     }
 }

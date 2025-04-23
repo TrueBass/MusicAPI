@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class RefreshTokenDto {
+public class ResponseTokenDto {
+    private String accessToken;
+    private String accessTokenType = "Bearer";
     private String refreshToken;
 }

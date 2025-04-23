@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class UserAuthDto {
 
     @NotBlank(message = "Username can't be empty.")
-    @Size(min = 6, max = 30, message = "Username length must have from 6 to 30 characters")
+    @Size(min = 6, max = 30, message = "Username must have from 6 to 30 characters")
     @Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "Username must contain only letters, digits and underscores")
     private String username;
 

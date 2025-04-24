@@ -5,17 +5,23 @@ import com.example.musicapi.dtos.user_dtos.UserAuthDto;
 import com.example.musicapi.dtos.refresh_token_dtos.ResponseTokenDto;
 import com.example.musicapi.dtos.user_dtos.UserDto;
 import com.example.musicapi.dtos.user_dtos.UserLoginDto;
+import com.example.musicapi.entities.Song;
+import com.example.musicapi.repositories.ISongRepository;
 import com.example.musicapi.services.implementations.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @AllArgsConstructor
 @RestController
 @RequestMapping("music-api/users")
 public class UserController {
     private final UserService userService;
+
 
     @PostMapping("/login")
     public ResponseEntity<ResponseTokenDto> login(@RequestBody UserLoginDto loginDto) {
@@ -46,4 +52,5 @@ public class UserController {
         UserDto user = userService.getUserByUsername(username);
         return ResponseEntity.ok(user);
     }
+
 }

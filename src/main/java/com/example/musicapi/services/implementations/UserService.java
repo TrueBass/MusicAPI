@@ -2,6 +2,7 @@ package com.example.musicapi.services.implementations;
 
 import com.example.musicapi.dtos.refresh_token_dtos.ResponseTokenDto;
 import com.example.musicapi.dtos.user_dtos.UserAuthDto;
+import com.example.musicapi.dtos.user_dtos.UserDto;
 import com.example.musicapi.dtos.user_dtos.UserLoginDto;
 import com.example.musicapi.entities.Role;
 import com.example.musicapi.entities.User;
@@ -141,5 +142,17 @@ public class UserService implements IUserService {
         String refreshToken = refreshTokenService.createRefreshToken(user).getToken();
 
         return new ResponseTokenDto(accessToken, "Bearer", refreshToken);
+    }
+
+    @Override
+    public UserDto getUserByUsername(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+
+        User foundUser = user.isPresent() ? user.get():
+                user.orElseThrow(
+                    () -> new NotFoundException("User not found")
+                );
+
+        return Mapper.MapToUserDto(foundUser);
     }
 }

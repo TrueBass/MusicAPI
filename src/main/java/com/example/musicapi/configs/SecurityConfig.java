@@ -46,7 +46,8 @@ public class SecurityConfig {
                                 "/music-api/users/signup",
                                 "/music-api/users/login",
                                 "/music-api/users/refresh",
-                                "/music-api/users/logout").permitAll()
+                                "/music-api/users/logout",
+                                "/music-api/users/{username}").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());

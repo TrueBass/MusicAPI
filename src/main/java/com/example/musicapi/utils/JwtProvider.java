@@ -1,6 +1,5 @@
 package com.example.musicapi.utils;
 
-import com.example.musicapi.entities.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

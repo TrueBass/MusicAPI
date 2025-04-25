@@ -4,7 +4,6 @@ import com.example.musicapi.entities.RefreshToken;
 import com.example.musicapi.entities.User;
 import com.example.musicapi.repositories.IRefreshTokenRepository;
 import com.example.musicapi.services.definitions.IRefreshTokenService;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

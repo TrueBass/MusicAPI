@@ -25,6 +25,5 @@ public class UserDto {
     @Min(value = 0, message = "Social credit must be positive integer")
     private int socialCredit;
 
-    private boolean isAdmin;
     private boolean isBanned;
 }

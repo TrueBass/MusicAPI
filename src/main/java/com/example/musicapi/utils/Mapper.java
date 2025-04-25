@@ -68,7 +68,6 @@ public final class Mapper {
                 user.getUsername(),
                 user.getEmail(),
                 user.getSocialCredit(),
-                user.isAdmin(),
                 user.isBanned()
         );
     }
@@ -79,7 +78,6 @@ public final class Mapper {
                 .username(userDto.getUsername())
                 .email(userDto.getEmail())
                 .socialCredit(userDto.getSocialCredit())
-                .isAdmin(userDto.isAdmin())
                 .isBanned(userDto.isBanned())
                 .build();
     }

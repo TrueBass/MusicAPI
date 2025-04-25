@@ -1,16 +1,12 @@
 package com.example.musicapi.services.implementations;
 
 import com.example.musicapi.dtos.refresh_token_dtos.ResponseTokenDto;
-import com.example.musicapi.dtos.user_dtos.UserAuthDto;
-import com.example.musicapi.dtos.user_dtos.UserDto;
-import com.example.musicapi.dtos.user_dtos.UserLoginDto;
+import com.example.musicapi.dtos.user_dtos.*;
 import com.example.musicapi.entities.Role;
 import com.example.musicapi.entities.User;
-import com.example.musicapi.exceptions.InvalidPasswordException;
-import com.example.musicapi.exceptions.NotFoundException;
-import com.example.musicapi.exceptions.UnauthorizedException;
+import com.example.musicapi.enums.UserRoles;
+import com.example.musicapi.exceptions.*;
 import com.example.musicapi.repositories.IRefreshTokenRepository;
-import com.example.musicapi.exceptions.AlreadyExistsException;
 import com.example.musicapi.repositories.IRoleRepository;
 import com.example.musicapi.repositories.IUserRepository;
 import com.example.musicapi.services.definitions.IRefreshTokenService;
@@ -64,7 +60,7 @@ public class UserService implements IUserService {
         User newUser = Mapper.MapToUser(userAuthDto);
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
 
-        Role defaultRole = roleRepository.findByName("USER").orElseThrow(
+        Role defaultRole = roleRepository.findByName(UserRoles.USER.name()).orElseThrow(
                 () -> new RuntimeException("Default role 'USER' not found")
         );
         newUser.getRoles().add(defaultRole);
@@ -154,5 +150,61 @@ public class UserService implements IUserService {
                 );
 
         return Mapper.MapToUserDto(foundUser);
+    }
+
+    @Override
+    public void updatePassword(UpdatePasswordDto updatePasswordDto) {
+        if (updatePasswordDto.oldPassword().equals(updatePasswordDto.newPassword())) {
+            throw new InvalidPasswordException("New password cannot be equal to the old one.");
+        }
+        if (!updatePasswordDto.newPassword().equals(updatePasswordDto.confirmPassword())) {
+            throw new InvalidPasswordException("Confirm password and new password do not match.");
+        }
+
+        var user = getCurrentUser();
+
+        if (!passwordEncoder.matches(updatePasswordDto.oldPassword(), user.getPassword())) {
+            throw new InvalidPasswordException("Old password is incorrect.");
+        }
+
+        user.setPassword(passwordEncoder.encode(updatePasswordDto.newPassword()));
+        userRepository.save(user);
+    }
+
+    @Override
+    public void updateEmail(UpdateEmailDto updateEmailDto) {
+        var user = getCurrentUser();
+
+        if (userRepository.findByEmail(updateEmailDto.email()).isPresent()) {
+            throw new EmailAlreadyTakenException("Provided email is already taken by another user.");
+        }
+
+        user.setEmail(updateEmailDto.email());
+        userRepository.save(user);
+    }
+
+    @Override
+    public void updateUsername(UpdateUsernameDto updateUsernameDto) {
+        var user = getCurrentUser();
+
+        if (userRepository.findByUsername(updateUsernameDto.username()).isPresent()) {
+            throw new UsernameAlreadyTakenException("Provided username is already taken by another user.");
+        }
+
+        user.setUsername(updateUsernameDto.username());
+        userRepository.save(user);
+    }
+
+    @Override
+    public User getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated()) {
+            throw new UnauthorizedException("User not authenticated");
+        }
+
+        String username = auth.getName();
+
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("User not found"));
     }
 }

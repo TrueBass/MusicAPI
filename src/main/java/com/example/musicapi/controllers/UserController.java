@@ -1,10 +1,8 @@
 package com.example.musicapi.controllers;
 
 import com.example.musicapi.dtos.refresh_token_dtos.RefreshTokenDto;
-import com.example.musicapi.dtos.user_dtos.UserAuthDto;
+import com.example.musicapi.dtos.user_dtos.*;
 import com.example.musicapi.dtos.refresh_token_dtos.ResponseTokenDto;
-import com.example.musicapi.dtos.user_dtos.UserDto;
-import com.example.musicapi.dtos.user_dtos.UserLoginDto;
 import com.example.musicapi.services.implementations.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -40,6 +38,24 @@ public class UserController {
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(@RequestBody @Valid RefreshTokenDto dto) {
         userService.logoutUser(dto.getRefreshToken());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/update-password")
+    public ResponseEntity<Void> updatePassword(@RequestBody @Valid UpdatePasswordDto updatePasswordDto) {
+        userService.updatePassword(updatePasswordDto);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/update-email")
+    public ResponseEntity<Void> updatePassword(@RequestBody @Valid UpdateEmailDto updateEmailDto) {
+        userService.updateEmail(updateEmailDto);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/update-username")
+    public ResponseEntity<Void> updatePassword(@RequestBody @Valid UpdateUsernameDto updateUsernameDto) {
+        userService.updateUsername(updateUsernameDto);
         return ResponseEntity.noContent().build();
     }
 

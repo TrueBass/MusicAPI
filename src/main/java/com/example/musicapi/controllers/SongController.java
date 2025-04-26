@@ -1,12 +1,14 @@
 package com.example.musicapi.controllers;
 
+import com.example.musicapi.dtos.song_dtos.CreateSongDto;
+import com.example.musicapi.dtos.song_dtos.SongDto;
 import com.example.musicapi.entities.Song;
 import com.example.musicapi.repositories.ISongRepository;
+import com.example.musicapi.services.definitions.ISongService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,12 +19,16 @@ import java.util.stream.Collectors;
 public class SongController {
 
     private final ISongRepository iSongRepository;
+    private final ISongService iSongService;
 
+    @PostMapping("add")
+    public ResponseEntity<SongDto> addSong(@RequestBody CreateSongDto song) {
+        SongDto songDto = iSongService.addSong(song);
+        return new ResponseEntity<>(songDto, HttpStatus.CREATED);
+    }
     @GetMapping("/search")
-    public List<String> searchTitles(@RequestParam String title) {
-        return iSongRepository.findByTitle(title)
-                .stream()
-                .map(Song::getTitle)
-                .collect(Collectors.toList());
+    public  ResponseEntity<List<String>> searchTitles(@RequestParam String title) {
+        List<String> songs = iSongService.findByTitle(title);
+        return  ResponseEntity.ok(songs);
     }
 }

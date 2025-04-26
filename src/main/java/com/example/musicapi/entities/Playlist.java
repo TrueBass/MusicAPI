@@ -23,7 +23,7 @@ public class Playlist {
     @Column(nullable = false)
     private Date createdAt;
 
-    @Column(nullable = false)
+    @Column
     private Date modifiedAt;
 
     @Column(nullable = false)

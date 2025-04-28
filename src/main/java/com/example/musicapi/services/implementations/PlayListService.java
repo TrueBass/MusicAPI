@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -30,6 +32,14 @@ public class PlayListService implements IPlaylistService {
         playlist.setUser(user);
         Playlist savedPlaylist = playListRepository.save(playlist);
         return Mapper.MapToPlaylistDto(savedPlaylist);
+    }
+
+    @Override
+    public List<PlaylistDto> getAllPlaylists(Long userId) {
+        List<Playlist> playlists = playListRepository.findByUserId(userId);
+        return playlists.stream()
+                .map(Mapper::MapToPlaylistDto)
+                .collect(Collectors.toList());
     }
 
 

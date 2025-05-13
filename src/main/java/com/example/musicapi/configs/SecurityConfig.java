@@ -48,10 +48,13 @@ public class SecurityConfig {
                                 "/music-api/users/refresh",
                                 "/music-api/users/logout",
                                 "/music-api/users/{username}",
-                                "/music-api/songs/add",
+                                "music-api/songs/add",
+                                "music-api/songs/{id}",
                                 "/music-api/songs/search",
+                                "/music-api/songs/bytes/",
+                                "/music-api/songs/info/all/{playerId}",
                                 "/music-api/playlist/create",
-                                "/music-api/playlist/get-all").permitAll()
+                                "music-api/playlist/get-all").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());

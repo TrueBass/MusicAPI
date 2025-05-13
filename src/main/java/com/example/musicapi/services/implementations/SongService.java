@@ -2,6 +2,7 @@ package com.example.musicapi.services.implementations;
 
 import com.example.musicapi.dtos.song_dtos.CreateSongDto;
 import com.example.musicapi.dtos.song_dtos.SongDto;
+import com.example.musicapi.dtos.song_dtos.SongInfoDto;
 import com.example.musicapi.entities.Playlist;
 import com.example.musicapi.entities.Song;
 import com.example.musicapi.repositories.IPlayListRepository;
@@ -41,5 +42,15 @@ public class SongService implements ISongService {
                 .stream()
                 .map(Song::getTitle)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SongInfoDto> getAllSongsInfo(Long playlistId) {
+        return songRepository.getAllWithoutData(playlistId);
+    }
+
+    @Override
+    public byte[] getSongBytes(Long songId) {
+        return songRepository.getDataById(songId);
     }
 }

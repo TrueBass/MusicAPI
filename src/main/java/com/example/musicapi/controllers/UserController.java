@@ -48,13 +48,13 @@ public class UserController {
     }
 
     @PutMapping("/update-email")
-    public ResponseEntity<Void> updatePassword(@RequestBody @Valid UpdateEmailDto updateEmailDto) {
+    public ResponseEntity<Void> updateEmail(@RequestBody @Valid UpdateEmailDto updateEmailDto) {
         userService.updateEmail(updateEmailDto);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/update-username")
-    public ResponseEntity<Void> updatePassword(@RequestBody @Valid UpdateUsernameDto updateUsernameDto) {
+    public ResponseEntity<Void> updateUsername(@RequestBody @Valid UpdateUsernameDto updateUsernameDto) {
         userService.updateUsername(updateUsernameDto);
         return ResponseEntity.noContent().build();
     }

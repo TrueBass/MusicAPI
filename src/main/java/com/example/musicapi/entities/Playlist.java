@@ -2,6 +2,8 @@ package com.example.musicapi.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 import java.util.Set;
 
@@ -21,9 +23,11 @@ public class Playlist {
     private String title;
 
     @Column(nullable = false)
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date createdAt;
 
     @Column
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date modifiedAt;
 
     @Column(nullable = false)

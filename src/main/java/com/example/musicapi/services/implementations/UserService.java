@@ -207,4 +207,13 @@ public class UserService implements IUserService {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new NotFoundException("User not found"));
     }
+
+    @Override
+    public void deleteUser(Long UserId) {
+        var user = getCurrentUser();
+        if (!user.getId().equals(UserId)) {
+            throw new UnauthorizedException("Only user can delete their account.");
+        }
+        userRepository.delete(user);
+    }
 }

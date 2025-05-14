@@ -22,4 +22,6 @@ public interface IUserService {
     void updateUsername(UpdateUsernameDto updateUsernameDto);
 
     User getCurrentUser();
+
+    void deleteUser(Long userId);
 }

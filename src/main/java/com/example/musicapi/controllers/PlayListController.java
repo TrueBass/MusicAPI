@@ -30,5 +30,10 @@ public class PlayListController {
         return new ResponseEntity<>(playlistDto, HttpStatus.OK);
     }
 
+    @DeleteMapping ("/delete")
+    public ResponseEntity<Void> deletePlaylist(@RequestParam Long playlistId) {
+        playlistService.deletePlaylist(playlistId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 }

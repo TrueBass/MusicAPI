@@ -54,7 +54,8 @@ public class SecurityConfig {
                                 "/music-api/songs/bytes/",
                                 "/music-api/songs/info/all/{playerId}",
                                 "/music-api/playlist/create",
-                                "music-api/playlist/get-all").permitAll()
+                                "music-api/playlist/get-all",
+                                "/music-api/playlist/delete").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());

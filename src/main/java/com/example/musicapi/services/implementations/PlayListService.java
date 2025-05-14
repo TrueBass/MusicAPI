@@ -4,6 +4,7 @@ import com.example.musicapi.dtos.playlist_dtos.CreatePlaylistDto;
 import com.example.musicapi.dtos.playlist_dtos.PlaylistDto;
 import com.example.musicapi.entities.Playlist;
 import com.example.musicapi.entities.User;
+import com.example.musicapi.exceptions.NotFoundException;
 import com.example.musicapi.repositories.IPlayListRepository;
 import com.example.musicapi.repositories.ISongRepository;
 import com.example.musicapi.repositories.IUserRepository;
@@ -40,6 +41,16 @@ public class PlayListService implements IPlaylistService {
         return playlists.stream()
                 .map(Mapper::MapToPlaylistDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deletePlaylist(Long playlistId) {
+        if(playListRepository.existsById(playlistId)) {
+            playListRepository.deleteById(playlistId);
+        }
+        else {
+            throw new NotFoundException("Playlist not found");
+        }
     }
 
 

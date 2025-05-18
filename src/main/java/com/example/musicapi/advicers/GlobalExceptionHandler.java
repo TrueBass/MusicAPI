@@ -21,33 +21,33 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(AlreadyExistsException.class)
-    public ResponseEntity<String> handleAlreadyExistsException(AlreadyExistsException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    public ResponseEntity<Map<String, Object>> handleAlreadyExistsException(AlreadyExistsException ex) {
+        return buildErrorResponse(ex.getMessage(), HttpStatus.CONFLICT, null);
     }
 
     @ExceptionHandler(InvalidPasswordException.class)
-    public ResponseEntity<String> handleInvalidPasswordException(InvalidPasswordException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED); // Status 401
+    public ResponseEntity<Map<String, Object>> handleInvalidPasswordException(InvalidPasswordException ex) {
+        return buildErrorResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED, null); // Status 401
     }
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<String> handleNotFoundException(NotFoundException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND); // Status 404
+    public ResponseEntity<Map<String, Object>> handleNotFoundException(NotFoundException ex) {
+        return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND, null); // Status 404
     }
 
     @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<String> handleUnauthorizedException(UnauthorizedException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED); // Status 404
+    public ResponseEntity<Map<String, Object>> handleUnauthorizedException(UnauthorizedException ex) {
+        return buildErrorResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED, null); // Status 401
     }
 
     @ExceptionHandler(UsernameAlreadyTakenException.class)
-    public ResponseEntity<String> handleAlreadyExistsException(UsernameAlreadyTakenException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    public ResponseEntity<Map<String, Object>> handleAlreadyExistsException(UsernameAlreadyTakenException ex) {
+        return buildErrorResponse(ex.getMessage(), HttpStatus.CONFLICT, null);
     }
 
     @ExceptionHandler(EmailAlreadyTakenException.class)
-    public ResponseEntity<String> handleAlreadyExistsException(EmailAlreadyTakenException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    public ResponseEntity<Map<String, Object>> handleAlreadyExistsException(EmailAlreadyTakenException ex) {
+        return buildErrorResponse(ex.getMessage(), HttpStatus.CONFLICT, null);
     }
 
     @ExceptionHandler({

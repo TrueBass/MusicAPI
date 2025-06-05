@@ -35,7 +35,7 @@ public class Playlist {
     private boolean isPrivate = false;
 
     @ManyToMany
-    @JoinTable( name = "playlist_sons",
+    @JoinTable( name = "playlist_songs",
     joinColumns = @JoinColumn(name = "playlist_id"), inverseJoinColumns = @JoinColumn(name = "song_id"))
     private Set<Song> songs = new HashSet<>();
 

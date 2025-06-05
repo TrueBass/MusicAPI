@@ -12,6 +12,5 @@ public record SongDto(
         Long likes,
         byte[] data,
         Long duration,
-        MusicGenre genre,
-        Long playlistId) {
+        MusicGenre genre) {
 }

@@ -31,7 +31,7 @@ public class SongService implements ISongService {
         song.setAddedAt(Date.valueOf(LocalDate.now()));
         song.setLikes(0L);
         Playlist playlist = playListRepository.getReferenceById(songDto.playlistId());
-        song.setPlaylist(playlist);
+        song.getPlaylists().add(playlist);
         Song savedSong = songRepository.save(song);
         return Mapper.MapToSongDto(savedSong);
     }

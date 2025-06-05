@@ -58,8 +58,7 @@ public final class Mapper {
                 song.getLikes(),
                 song.getData(),
                 song.getDuration(),
-                song.getGenre(),
-                song.getPlaylists().);
+                song.getGenre());
     }
 
     public static UserDto MapToUserDto(User user){

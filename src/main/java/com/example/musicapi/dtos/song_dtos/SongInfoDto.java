@@ -16,6 +16,5 @@ public record SongInfoDto(
         Date addedAt,
         Long likes,
         Long duration,
-        MusicGenre genre,
-        Long playlistId
+        MusicGenre genre
 ) {}

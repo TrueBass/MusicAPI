@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -33,8 +34,10 @@ public class Playlist {
     @Column(nullable = false)
     private boolean isPrivate = false;
 
-    @OneToMany(mappedBy = "playlist", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private Set<Song> songs;
+    @ManyToMany
+    @JoinTable( name = "playlist_songs",
+    joinColumns = @JoinColumn(name = "playlist_id"), inverseJoinColumns = @JoinColumn(name = "song_id"))
+    private Set<Song> songs = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(name = "fk_playlists_user"))

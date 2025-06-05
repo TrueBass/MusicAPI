@@ -4,6 +4,8 @@ import com.example.musicapi.enums.MusicGenre;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="songs")
@@ -39,7 +41,6 @@ public class Song {
     @Column(nullable = false)
     private MusicGenre genre = MusicGenre.OTHER;
 
-    @ManyToOne
-    @JoinColumn(name = "playlist_id", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(name = "fk_songs_playlist"))
-    private Playlist playlist;
+    @ManyToMany(mappedBy = "songs")
+    private Set<Playlist> playlists = new HashSet<>();
 }

@@ -18,10 +18,9 @@ public interface ISongRepository extends JpaRepository<Song, Long> {
             "s.addedAt, " +
             "s.likes, " +
             "s.duration, " +
-            "s.genre, " +
-            "s.playlist.id) " +
-            "FROM Song s " +
-            "WHERE s.playlist.id = :playlistId")
+            "s.genre) " +
+            "FROM Song s JOIN s.playlists p " + // JOIN through the collection
+            "WHERE p.id = :playlistId")
     List<SongInfoDto> getAllWithoutData(@Param("playlistId") Long playlistId);
 
     @Query("SELECT s.data FROM Song s WHERE s.id = :id")

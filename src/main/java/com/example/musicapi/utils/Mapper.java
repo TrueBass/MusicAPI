@@ -46,6 +46,7 @@ public final class Mapper {
                 .duration(dto.duration())
                 .data(dto.data())
                 .genre(dto.genre())
+                .playlists(new HashSet<>())
                 .build();
     }
 
@@ -58,8 +59,7 @@ public final class Mapper {
                 song.getLikes(),
                 song.getData(),
                 song.getDuration(),
-                song.getGenre(),
-                song.getPlaylist().getId());
+                song.getGenre());
     }
 
     public static UserDto MapToUserDto(User user){

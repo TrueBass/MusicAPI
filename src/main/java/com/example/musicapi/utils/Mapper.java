@@ -46,6 +46,7 @@ public final class Mapper {
                 .duration(dto.duration())
                 .data(dto.data())
                 .genre(dto.genre())
+                .playlists(new HashSet<>())
                 .build();
     }
 

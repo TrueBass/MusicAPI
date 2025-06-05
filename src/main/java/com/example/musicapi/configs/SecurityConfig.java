@@ -51,7 +51,7 @@ public class SecurityConfig {
                                 "music-api/songs/add",
                                 "music-api/songs/{id}",
                                 "/music-api/songs/search",
-                                "/music-api/songs/bytes/",
+                                "/music-api/songs/bytes/{songId}",
                                 "/music-api/songs/info/all/{playerId}",
                                 "/music-api/playlist/create",
                                 "music-api/playlist/get-all",

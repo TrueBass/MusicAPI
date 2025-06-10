@@ -7,8 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ISongRepository extends JpaRepository<Song, Long> {
+    Optional<Song> findByTitleAndAuthor(String title, String author);
+
     List<Song> findByTitle(String title);
 
     @Query("SELECT new com.example.musicapi.dtos.song_dtos.SongInfoDto(" +

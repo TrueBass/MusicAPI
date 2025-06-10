@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,9 +28,17 @@ public class SongService implements ISongService {
 
     @Override
     public SongDto addSong(CreateSongDto songDto) {
-        Song song = Mapper.MapToSong(songDto);
-        song.setAddedAt(Date.valueOf(LocalDate.now()));
-        song.setLikes(0L);
+
+        Optional<Song> existingSongOptional = songRepository.findByTitleAndAuthor(songDto.title(), songDto.author());
+
+        Song song;
+        if (existingSongOptional.isPresent()) {
+            song = existingSongOptional.get();
+        } else {
+            song = Mapper.MapToSong(songDto);
+            song.setAddedAt(Date.valueOf(LocalDate.now()));
+            song.setLikes(0L);
+        }
 
         Playlist playlist = playListRepository.getReferenceById(songDto.playlistId());
         playlist.getSongs().add(song);

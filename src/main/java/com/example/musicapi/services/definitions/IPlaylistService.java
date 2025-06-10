@@ -10,4 +10,5 @@ public interface IPlaylistService {
     PlaylistDto createPlaylist(CreatePlaylistDto playlistDto);
     List<PlaylistDto> getAllPlaylists(Long userId);
     void deletePlaylist(Long playlistId);
+    void changeVisibility(Long playlistId, Boolean visibility);
 }

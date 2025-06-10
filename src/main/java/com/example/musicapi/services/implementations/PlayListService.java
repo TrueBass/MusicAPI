@@ -53,5 +53,14 @@ public class PlayListService implements IPlaylistService {
         }
     }
 
+    @Override
+    public void changeVisibility(Long playlistId, Boolean visibility) {
+        Playlist playlist = playListRepository.findById(playlistId).orElseThrow(
+                () -> new NotFoundException("Playlist not found")
+        );
+
+        playlist.setPrivate(visibility);
+        playListRepository.save(playlist);
+    }
 
 }

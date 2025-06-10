@@ -36,4 +36,9 @@ public class PlayListController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PostMapping("/change-visibility")
+    public ResponseEntity<Void> changePlaylistVisibility(@RequestParam Long playlistId, @RequestParam Boolean visibility) {
+        playlistService.changeVisibility(playlistId, visibility);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

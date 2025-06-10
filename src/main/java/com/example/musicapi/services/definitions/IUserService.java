@@ -24,4 +24,6 @@ public interface IUserService {
     User getCurrentUser();
 
     void deleteUser(Long userId);
+
+    int updateSocialCredit(Long userId, int newCredit);
 }

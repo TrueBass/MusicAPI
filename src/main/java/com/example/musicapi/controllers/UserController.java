@@ -70,4 +70,13 @@ public class UserController {
         userService.deleteUser(userId);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/update-social-credit")
+    public ResponseEntity<Integer> changeSocialCredit(@RequestBody UpdateSocialCreditDto updateSocialCreditDto) {
+        int changedSocialCredit = userService.updateSocialCredit(
+                updateSocialCreditDto.userId(),
+                updateSocialCreditDto.changedSocialCredit()
+        );
+        return  ResponseEntity.ok(changedSocialCredit);
+    }
 }

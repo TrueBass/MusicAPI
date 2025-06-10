@@ -216,4 +216,17 @@ public class UserService implements IUserService {
         }
         userRepository.delete(user);
     }
+
+    @Override
+    public int updateSocialCredit(Long userId, int newCredit) {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new NotFoundException("User not found")
+        );
+
+        int changedSocialCredit = user.getSocialCredit() + newCredit;
+
+        user.setSocialCredit(changedSocialCredit);
+        userRepository.save(user);
+        return changedSocialCredit;
+    }
 }

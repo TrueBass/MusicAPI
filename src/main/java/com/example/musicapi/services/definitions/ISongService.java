@@ -13,5 +13,7 @@ public interface ISongService {
 
     List<SongInfoDto> getAllSongsInfo(Long playlistId);
 
+    List<SongInfoDto> getAllPopularSongs();
+
     byte[] getSongBytes(Long songId);
 }

@@ -65,6 +65,11 @@ public class SongService implements ISongService {
     }
 
     @Override
+    public List<SongInfoDto> getAllPopularSongs() {
+        return songRepository.getAllPopular();
+    }
+
+    @Override
     public byte[] getSongBytes(Long songId) {
         return songRepository.getDataById(songId);
     }

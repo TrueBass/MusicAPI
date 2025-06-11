@@ -28,4 +28,16 @@ public interface ISongRepository extends JpaRepository<Song, Long> {
 
     @Query("SELECT s.data FROM Song s WHERE s.id = :id")
     byte[] getDataById(Long id);
+
+    @Query("SELECT new com.example.musicapi.dtos.song_dtos.SongInfoDto(" +
+            "s.id, " +
+            "s.title, " +
+            "s.author, " +
+            "s.addedAt, " +
+            "s.likes, " +
+            "s.duration, " +
+            "s.genre) " +
+            "FROM Song s " +
+            "ORDER BY s.likes DESC")
+    List<SongInfoDto> getAllPopular();
 }

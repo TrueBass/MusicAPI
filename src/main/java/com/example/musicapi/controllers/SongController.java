@@ -44,4 +44,10 @@ public class SongController {
         List<String> songs = iSongService.findByTitle(title);
         return  ResponseEntity.ok(songs);
     }
+
+    @GetMapping("/popular/all")
+    public ResponseEntity<List<SongInfoDto>> getAllPopularSongs() {
+        List<SongInfoDto> songs = iSongService.getAllPopularSongs();
+        return ResponseEntity.ok(songs);
+    }
 }

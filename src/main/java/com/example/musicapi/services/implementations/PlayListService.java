@@ -3,6 +3,7 @@ package com.example.musicapi.services.implementations;
 import com.example.musicapi.dtos.playlist_dtos.CreatePlaylistDto;
 import com.example.musicapi.dtos.playlist_dtos.PlaylistDto;
 import com.example.musicapi.entities.Playlist;
+import com.example.musicapi.entities.Song;
 import com.example.musicapi.entities.User;
 import com.example.musicapi.exceptions.NotFoundException;
 import com.example.musicapi.repositories.IPlayListRepository;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,12 +47,10 @@ public class PlayListService implements IPlaylistService {
 
     @Override
     public void deletePlaylist(Long playlistId) {
-        if(playListRepository.existsById(playlistId)) {
-            playListRepository.deleteById(playlistId);
-        }
-        else {
-            throw new NotFoundException("Playlist not found");
-        }
+        Playlist playlist = playListRepository.findById(playlistId)
+                .orElseThrow(() -> new NotFoundException("Playlist not found with ID: " + playlistId));
+
+        playListRepository.delete(playlist);
     }
 
     @Override

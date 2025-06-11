@@ -14,6 +14,8 @@ public interface ISongRepository extends JpaRepository<Song, Long> {
 
     List<Song> findByTitle(String title);
 
+    List<Song> findTop10ByLikes();
+
     @Query("SELECT new com.example.musicapi.dtos.song_dtos.SongInfoDto(" +
             "s.id, " +
             "s.title, " +

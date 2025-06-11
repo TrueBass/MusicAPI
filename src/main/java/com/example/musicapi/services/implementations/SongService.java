@@ -15,8 +15,10 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -72,5 +74,17 @@ public class SongService implements ISongService {
     @Override
     public byte[] getSongBytes(Long songId) {
         return songRepository.getDataById(songId);
+    }
+
+    @Override
+    public List<Song> getTop10Songs(Long userId) {
+        List<Playlist> playlists = playListRepository.findByUserId(userId);
+        Set<Song> allSongs = playlists.stream()
+                .flatMap(playlist -> playlist.getSongs().stream())
+                .collect(Collectors.toSet());
+        return allSongs.stream()
+                .sorted(Comparator.comparing(Song::getAddedAt).reversed())
+                .limit(10)
+                .toList();
     }
 }

@@ -3,6 +3,7 @@ package com.example.musicapi.services.definitions;
 import com.example.musicapi.dtos.song_dtos.CreateSongDto;
 import com.example.musicapi.dtos.song_dtos.SongDto;
 import com.example.musicapi.dtos.song_dtos.SongInfoDto;
+import com.example.musicapi.entities.Song;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface ISongService {
     List<SongInfoDto> getAllPopularSongs();
 
     byte[] getSongBytes(Long songId);
+
+    List<Song> getTop10Songs(Long userId);
 }

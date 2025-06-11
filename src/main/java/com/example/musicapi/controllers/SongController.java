@@ -50,4 +50,9 @@ public class SongController {
         List<SongInfoDto> songs = iSongService.getAllPopularSongs();
         return ResponseEntity.ok(songs);
     }
+
+    @GetMapping("/top10")
+    public List<Song> getTop10Songs(@RequestParam Long userId) {
+        return iSongService.getTop10Songs(userId);
+    }
 }

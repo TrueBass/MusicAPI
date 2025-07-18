@@ -2,7 +2,6 @@ package com.example.musicapi.controllers;
 
 import com.example.musicapi.dtos.playlist_dtos.CreatePlaylistDto;
 import com.example.musicapi.dtos.playlist_dtos.PlaylistDto;
-import com.example.musicapi.entities.Playlist;
 import com.example.musicapi.services.definitions.IPlaylistService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -40,5 +39,11 @@ public class PlayListController {
     public ResponseEntity<Void> changePlaylistVisibility(@RequestParam Long playlistId, @RequestParam Boolean visibility) {
         playlistService.changeVisibility(playlistId, visibility);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/largest")
+    public ResponseEntity<PlaylistDto> getAllPlaylistsByUserId(@RequestParam Long userId) {
+        PlaylistDto largestPlaylist = playlistService.getLargest(userId);
+        return new ResponseEntity<>(largestPlaylist, HttpStatus.OK);
     }
 }

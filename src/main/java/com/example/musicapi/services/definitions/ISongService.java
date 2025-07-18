@@ -18,5 +18,5 @@ public interface ISongService {
 
     byte[] getSongBytes(Long songId);
 
-    List<Song> getTop10Songs(Long userId);
+    List<SongInfoDto> getTop10Songs(Long userId);
 }

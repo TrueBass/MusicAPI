@@ -77,14 +77,14 @@ public class SongService implements ISongService {
     }
 
     @Override
-    public List<Song> getTop10Songs(Long userId) {
+    public List<SongInfoDto> getTop10Songs(Long userId) {
         List<Playlist> playlists = playListRepository.findByUserId(userId);
         Set<Song> allSongs = playlists.stream()
                 .flatMap(playlist -> playlist.getSongs().stream())
                 .collect(Collectors.toSet());
         return allSongs.stream()
                 .sorted(Comparator.comparing(Song::getAddedAt).reversed())
-                .limit(10)
+                .limit(10).map(s->new SongInfoDto(s.getId(),s.getTitle(),s.getAuthor(),s.getAddedAt(),s.getLikes(),s.getDuration(),s.getGenre()))
                 .toList();
     }
 }

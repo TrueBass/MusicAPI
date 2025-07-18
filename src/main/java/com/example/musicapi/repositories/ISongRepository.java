@@ -14,7 +14,7 @@ public interface ISongRepository extends JpaRepository<Song, Long> {
 
     List<Song> findByTitle(String title);
 
-    List<Song> findTop10ByLikes();
+//    List<Song> findTop10ByLikes();
 
     @Query("SELECT new com.example.musicapi.dtos.song_dtos.SongInfoDto(" +
             "s.id, " +
@@ -42,4 +42,11 @@ public interface ISongRepository extends JpaRepository<Song, Long> {
             "FROM Song s " +
             "ORDER BY s.likes DESC")
     List<SongInfoDto> getAllPopular();
+
+    @Query("""
+        SELECT COUNT(s) FROM Playlist p 
+        JOIN p.songs s 
+        WHERE p.user.id = :userId
+    """)
+    long countAllSongsOfUser(@Param("userId") Long userId);
 }

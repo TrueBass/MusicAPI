@@ -3,8 +3,6 @@ package com.example.musicapi.controllers;
 import com.example.musicapi.dtos.song_dtos.CreateSongDto;
 import com.example.musicapi.dtos.song_dtos.SongDto;
 import com.example.musicapi.dtos.song_dtos.SongInfoDto;
-import com.example.musicapi.entities.Song;
-import com.example.musicapi.repositories.ISongRepository;
 import com.example.musicapi.services.definitions.ISongService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @RestController
@@ -52,7 +49,7 @@ public class SongController {
     }
 
     @GetMapping("/top10")
-    public List<Song> getTop10Songs(@RequestParam Long userId) {
-        return iSongService.getTop10Songs(userId);
+    public List<SongInfoDto> getTop10Songs(@RequestParam Long userId) {
+      return iSongService.getTop10Songs(userId);
     }
 }

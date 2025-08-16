@@ -9,7 +9,7 @@ public record SongDto(
         String title,
         String author,
         Date addedAt,
-        Long likes,
+        int likes,
         byte[] data,
         Long duration,
         MusicGenre genre) {

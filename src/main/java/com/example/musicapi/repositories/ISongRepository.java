@@ -1,6 +1,7 @@
 package com.example.musicapi.repositories;
 
 import com.example.musicapi.dtos.song_dtos.SongInfoDto;
+import com.example.musicapi.dtos.song_dtos.SongInfoLikeDto;
 import com.example.musicapi.entities.Song;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,14 +15,12 @@ public interface ISongRepository extends JpaRepository<Song, Long> {
 
     List<Song> findByTitle(String title);
 
-//    List<Song> findTop10ByLikes();
-
     @Query("SELECT new com.example.musicapi.dtos.song_dtos.SongInfoDto(" +
             "s.id, " +
             "s.title, " +
             "s.author, " +
             "s.addedAt, " +
-            "s.likes, " +
+            "SIZE(s.likes), " +
             "s.duration, " +
             "s.genre) " +
             "FROM Song s JOIN s.playlists p " + // JOIN through the collection
@@ -31,17 +30,17 @@ public interface ISongRepository extends JpaRepository<Song, Long> {
     @Query("SELECT s.data FROM Song s WHERE s.id = :id")
     byte[] getDataById(Long id);
 
-    @Query("SELECT new com.example.musicapi.dtos.song_dtos.SongInfoDto(" +
+    @Query("SELECT new com.example.musicapi.dtos.song_dtos.SongInfoLikeDto(" +
             "s.id, " +
             "s.title, " +
             "s.author, " +
             "s.addedAt, " +
-            "s.likes, " +
+            "SIZE(s.likes), " +
             "s.duration, " +
-            "s.genre) " +
+            "s.genre, false, s.uploader) " +
             "FROM Song s " +
-            "ORDER BY s.likes DESC")
-    List<SongInfoDto> getAllPopular();
+            "ORDER BY SIZE(s.likes) DESC")
+    List<SongInfoLikeDto> getAllPopular();
 
     @Query("""
         SELECT COUNT(s) FROM Playlist p 

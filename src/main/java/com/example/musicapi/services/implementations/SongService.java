@@ -3,10 +3,13 @@ package com.example.musicapi.services.implementations;
 import com.example.musicapi.dtos.song_dtos.CreateSongDto;
 import com.example.musicapi.dtos.song_dtos.SongDto;
 import com.example.musicapi.dtos.song_dtos.SongInfoDto;
+import com.example.musicapi.dtos.song_dtos.SongInfoLikeDto;
 import com.example.musicapi.entities.Playlist;
 import com.example.musicapi.entities.Song;
+import com.example.musicapi.repositories.ILikeRepository;
 import com.example.musicapi.repositories.IPlayListRepository;
 import com.example.musicapi.repositories.ISongRepository;
+import com.example.musicapi.services.definitions.ILikeService;
 import com.example.musicapi.services.definitions.IPlaylistService;
 import com.example.musicapi.services.definitions.ISongService;
 import com.example.musicapi.utils.Mapper;
@@ -27,20 +30,12 @@ public class SongService implements ISongService {
 
     private final ISongRepository songRepository;
     private final IPlayListRepository playListRepository;
+    private final LikeService likeService;
 
     @Override
     public SongDto addSong(CreateSongDto songDto) {
-
-        Optional<Song> existingSongOptional = songRepository.findByTitleAndAuthor(songDto.title(), songDto.author());
-
-        Song song;
-        if (existingSongOptional.isPresent()) {
-            song = existingSongOptional.get();
-        } else {
-            song = Mapper.MapToSong(songDto);
-            song.setAddedAt(Date.valueOf(LocalDate.now()));
-            song.setLikes(0L);
-        }
+        Song song = Mapper.MapToSong(songDto);
+        song.setAddedAt(Date.valueOf(LocalDate.now()));
 
         Playlist playlist = playListRepository.getReferenceById(songDto.playlistId());
         playlist.getSongs().add(song);
@@ -67,8 +62,12 @@ public class SongService implements ISongService {
     }
 
     @Override
-    public List<SongInfoDto> getAllPopularSongs() {
-        return songRepository.getAllPopular();
+    public List<SongInfoLikeDto> getAllPopularSongs(Long userId) {
+      List<SongInfoLikeDto> songs = songRepository.getAllPopular();
+      songs.forEach(song ->
+         song.setLikedByUser(likeService.hasUserLiked(userId, song.getId()))
+      );
+      return songs;
     }
 
     @Override
@@ -83,8 +82,8 @@ public class SongService implements ISongService {
                 .flatMap(playlist -> playlist.getSongs().stream())
                 .collect(Collectors.toSet());
         return allSongs.stream()
-                .sorted(Comparator.comparing(Song::getAddedAt).reversed())
-                .limit(10).map(s->new SongInfoDto(s.getId(),s.getTitle(),s.getAuthor(),s.getAddedAt(),s.getLikes(),s.getDuration(),s.getGenre()))
+                .sorted(Comparator.comparing(song -> ((Song)song).getLikes().size()).reversed())
+                .limit(10).map(s->new SongInfoDto(s.getId(),s.getTitle(),s.getAuthor(),s.getAddedAt(),s.getLikes().size(),s.getDuration(),s.getGenre()))
                 .toList();
     }
 }

@@ -1,6 +1,5 @@
 package com.example.musicapi.dtos.stats_dtos;
 
-import com.example.musicapi.dtos.playlist_dtos.PlaylistDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

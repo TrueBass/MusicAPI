@@ -58,14 +58,14 @@ public class SecurityConfig {
                                 "/music-api/songs/bytes/{songId}",
                                 "/music-api/songs/info/all/{playerId}",
                                 "/music-api/songs/popular/all",
-                                "music-api/songs/top10",
+                                "/music-api/songs/top10",
                                 "/music-api/playlist/create",
                                 "/music-api/playlist/get-all",
                                 "/music-api/playlist/delete",
                                 "/music-api/playlist/change-visibility").permitAll()
                         .anyRequest().authenticated()
-                )
-                .httpBasic(Customizer.withDefaults());
+                );
+//                .httpBasic(Customizer.withDefaults());
 
         http.addFilterBefore(jwtAuthFilter(jwtProvider, customUserDetailsService), UsernamePasswordAuthenticationFilter.class);
         return http.build();

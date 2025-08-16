@@ -3,6 +3,7 @@ package com.example.musicapi.controllers;
 import com.example.musicapi.dtos.song_dtos.CreateSongDto;
 import com.example.musicapi.dtos.song_dtos.SongDto;
 import com.example.musicapi.dtos.song_dtos.SongInfoDto;
+import com.example.musicapi.dtos.song_dtos.SongInfoLikeDto;
 import com.example.musicapi.services.definitions.ISongService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -43,8 +44,8 @@ public class SongController {
     }
 
     @GetMapping("/popular/all")
-    public ResponseEntity<List<SongInfoDto>> getAllPopularSongs() {
-        List<SongInfoDto> songs = iSongService.getAllPopularSongs();
+    public ResponseEntity<List<SongInfoLikeDto>> getAllPopularSongs(@RequestParam Long userId) {
+        List<SongInfoLikeDto> songs = iSongService.getAllPopularSongs(userId);
         return ResponseEntity.ok(songs);
     }
 

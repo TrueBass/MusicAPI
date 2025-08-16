@@ -14,7 +14,9 @@ public record SongInfoDto(
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
         @JsonFormat(pattern = "dd-MM-yyyy")
         Date addedAt,
-        Long likes,
+        int likes,
         Long duration,
         MusicGenre genre
-) {}
+) {
+
+}

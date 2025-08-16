@@ -26,10 +26,10 @@ public class Song {
     private String author;
 
     @Column(nullable = false)
-    private Date addedAt;
+    private String uploader;
 
     @Column(nullable = false)
-    private Long likes;
+    private Date addedAt;
 
     @Column(nullable = false)
     private byte[] data;
@@ -43,4 +43,7 @@ public class Song {
 
     @ManyToMany(mappedBy = "songs")
     private Set<Playlist> playlists = new HashSet<>();
+
+    @OneToMany(mappedBy = "song", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Like> likes = new HashSet<>();
 }

@@ -47,6 +47,8 @@ public final class Mapper {
                 .data(dto.data())
                 .genre(dto.genre())
                 .playlists(new HashSet<>())
+                .likes(new HashSet<>())
+                .uploader(dto.uploader())
                 .build();
     }
 
@@ -56,7 +58,7 @@ public final class Mapper {
                 song.getTitle(),
                 song.getAuthor(),
                 song.getAddedAt(),
-                song.getLikes(),
+                song.getLikes().size(),
                 song.getData(),
                 song.getDuration(),
                 song.getGenre());

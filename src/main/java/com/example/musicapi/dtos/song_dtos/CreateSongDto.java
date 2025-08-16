@@ -8,5 +8,6 @@ public record CreateSongDto(
         Long duration,
         byte[] data,
         MusicGenre genre,
-        Long playlistId) {
+        Long playlistId,
+        String uploader) {
 }

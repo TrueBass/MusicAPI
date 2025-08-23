@@ -184,7 +184,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void updateUsername(UpdateUsernameDto updateUsernameDto) {
+    public String updateUsername(UpdateUsernameDto updateUsernameDto) {
         var user = getCurrentUser();
 
         if (userRepository.findByUsername(updateUsernameDto.username()).isPresent()) {
@@ -193,6 +193,9 @@ public class UserService implements IUserService {
 
         user.setUsername(updateUsernameDto.username());
         userRepository.save(user);
+
+        Authentication auth = new UsernamePasswordAuthenticationToken(user.getUsername(), null, user.getAuthorities());
+        return jwtProvider.generateToken(auth);
     }
 
     @Override

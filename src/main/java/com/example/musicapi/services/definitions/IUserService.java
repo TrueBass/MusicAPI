@@ -19,7 +19,7 @@ public interface IUserService {
 
     void updateEmail(UpdateEmailDto updateEmailDto);
 
-    void updateUsername(UpdateUsernameDto updateUsernameDto);
+    String updateUsername(UpdateUsernameDto updateUsernameDto);
 
     User getCurrentUser();
 

@@ -1,7 +1,6 @@
 package com.example.musicapi.dtos.song_dtos;
 
 
-import com.example.musicapi.enums.MusicGenre;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -16,7 +15,7 @@ public record SongInfoDto(
         Date addedAt,
         int likes,
         Long duration,
-        MusicGenre genre
+        Long genreId
 ) {
 
 }

@@ -10,5 +10,4 @@ import java.util.Optional;
 public interface ILikeRepository extends JpaRepository<Like, Long> {
   Optional<Like> findByUserAndSong(User user, Song song);
   long countBySong(Song song);
-  void deleteByUserAndSong(User user, Song song);
 }

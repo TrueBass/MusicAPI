@@ -12,5 +12,5 @@ public record PlaylistDto(
         @JsonFormat(pattern = "dd-MM-yyyy")
         Date modifiedAt,
         boolean isPrivate,
-        Long usedId) {
+        Long userId) {
 }

@@ -14,11 +14,13 @@ public class AccountStatsDto {
     this.totalPlaylists = totalPlaylists;
     this.totalSongs = totalSongs;
   }
+
   private PlaylistSummary playlistSummary = new PlaylistSummary();
   private long totalLikes;
   private long totalSongs;
   private long totalPlaylists;
   private double avgLikesPerSong;
+
   public void setPlaylistSummary(String title, long songsCount) {
     playlistSummary.setTitle(title);
     playlistSummary.setSongsCount(songsCount);

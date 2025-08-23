@@ -7,6 +7,7 @@ import com.example.musicapi.exceptions.NotFoundException;
 import com.example.musicapi.repositories.ILikeRepository;
 import com.example.musicapi.repositories.ISongRepository;
 import com.example.musicapi.repositories.IUserRepository;
+import com.example.musicapi.services.definitions.ILikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +16,7 @@ import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
-public class LikeService {
+public class LikeService implements ILikeService {
   private final ILikeRepository likeRepository;
   private final IUserRepository userRepository;
   private final ISongRepository songRepository;

@@ -1,6 +1,5 @@
 package com.example.musicapi.entities;
 
-import com.example.musicapi.enums.MusicGenre;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.Date;
@@ -26,9 +25,6 @@ public class Song {
     private String author;
 
     @Column(nullable = false)
-    private String uploader;
-
-    @Column(nullable = false)
     private Date addedAt;
 
     @Column(nullable = false)
@@ -37,9 +33,9 @@ public class Song {
     @Column(nullable = false)
     private Long duration;
 
-    @Enumerated(EnumType.ORDINAL)
-    @Column(nullable = false)
-    private MusicGenre genre = MusicGenre.OTHER;
+    @ManyToOne
+    @JoinColumn(name = "genre_id", nullable = false)
+    private Genre genre;
 
     @ManyToMany(mappedBy = "songs")
     private Set<Playlist> playlists = new HashSet<>();

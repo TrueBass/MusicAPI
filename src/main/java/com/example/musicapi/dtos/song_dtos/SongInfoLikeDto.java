@@ -1,6 +1,6 @@
 package com.example.musicapi.dtos.song_dtos;
 
-import com.example.musicapi.enums.MusicGenre;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+
 
 @AllArgsConstructor
 @Setter
@@ -21,7 +22,7 @@ public class SongInfoLikeDto {
   Date addedAt;
   int likes;
   Long duration;
-  MusicGenre genre;
+  Long genreId;
   boolean isLikedByUser;
   String uploader;
 }

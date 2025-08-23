@@ -54,9 +54,9 @@ public class UserController {
     }
 
     @PutMapping("/update-username")
-    public ResponseEntity<Void> updateUsername(@RequestBody @Valid UpdateUsernameDto updateUsernameDto) {
-        userService.updateUsername(updateUsernameDto);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> updateUsername(@RequestBody @Valid UpdateUsernameDto updateUsernameDto) {
+        String token = userService.updateUsername(updateUsernameDto);
+        return ResponseEntity.ok(token);
     }
 
     @GetMapping("/{username}")

@@ -1,5 +1,7 @@
 package com.example.musicapi.utils;
 
+import com.example.musicapi.dtos.genre_dtos.CreateGenreDto;
+import com.example.musicapi.dtos.genre_dtos.GenreDto;
 import com.example.musicapi.dtos.playlist_dtos.CreatePlaylistDto;
 import com.example.musicapi.dtos.playlist_dtos.UpdatePlaylistDto;
 import com.example.musicapi.dtos.song_dtos.CreateSongDto;
@@ -7,13 +9,20 @@ import com.example.musicapi.dtos.playlist_dtos.PlaylistDto;
 import com.example.musicapi.dtos.song_dtos.SongDto;
 import com.example.musicapi.dtos.user_dtos.UserAuthDto;
 import com.example.musicapi.dtos.user_dtos.UserDto;
+import com.example.musicapi.entities.Genre;
 import com.example.musicapi.entities.Playlist;
 import com.example.musicapi.entities.Song;
 import com.example.musicapi.entities.User;
+import com.example.musicapi.exceptions.NotFoundException;
+import com.example.musicapi.repositories.IGenreRepository;
+import lombok.AllArgsConstructor;
 
 import java.util.HashSet;
 
+@AllArgsConstructor
 public final class Mapper {
+    private static IGenreRepository iGenreRepository;
+
     public static Playlist MapToPlaylist(CreatePlaylistDto dto) {
         return Playlist.builder()
                 .title(dto.title())
@@ -45,10 +54,8 @@ public final class Mapper {
                 .author(dto.author())
                 .duration(dto.duration())
                 .data(dto.data())
-                .genre(dto.genre())
                 .playlists(new HashSet<>())
                 .likes(new HashSet<>())
-                .uploader(dto.uploader())
                 .build();
     }
 
@@ -61,7 +68,7 @@ public final class Mapper {
                 song.getLikes().size(),
                 song.getData(),
                 song.getDuration(),
-                song.getGenre());
+                song.getGenre().getId());
     }
 
     public static UserDto MapToUserDto(User user){
@@ -91,5 +98,20 @@ public final class Mapper {
                 .password(userAuthDto.getPassword())
                 .roles(new HashSet<>())
                 .build();
+    }
+
+    public static Genre MapToGenre(GenreDto genreDto) {
+        return new Genre(
+                genreDto.getId(),
+                genreDto.getName(),
+                new HashSet<>()
+        );
+    }
+
+    public static GenreDto MapToGenreDto(Genre genre) {
+        return new GenreDto(
+                genre.getId(),
+                genre.getName()
+        );
     }
 }

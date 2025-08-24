@@ -20,7 +20,6 @@ import java.util.List;
 public class SongController {
 
     private final ISongService iSongService;
-    private final SongService songService;
 
     @PostMapping("/add")
     public ResponseEntity<SongDto> addSong(@RequestBody CreateSongDto song) {

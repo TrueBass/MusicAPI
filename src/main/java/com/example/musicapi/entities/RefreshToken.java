@@ -7,11 +7,8 @@ import java.util.Date;
 
 @Entity
 @Table(name = "refresh_tokens")
-@Setter
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Setter @Getter @Builder
+@NoArgsConstructor @AllArgsConstructor
 public class RefreshToken {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,6 +18,10 @@ public class RefreshToken {
     Date createdAt;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_refresh_token_user"))
+    @JoinColumn(name = "user_id",
+            referencedColumnName = "id",
+            foreignKey = @ForeignKey(
+                    name = "fk_refresh_token_user")
+    )
     private User user;
 }

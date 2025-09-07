@@ -10,11 +10,8 @@ import java.util.Set;
 
 @Entity
 @Table(name="playlists")
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
-@Builder
+@Getter @Setter @Builder
+@AllArgsConstructor @NoArgsConstructor
 public class Playlist {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,7 +21,7 @@ public class Playlist {
     private String title;
 
     @Column(nullable = false)
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    @DateTimeFormat(pattern = "DD-MM-yyyy")
     private Date createdAt;
 
     @Column
@@ -34,12 +31,15 @@ public class Playlist {
     @Column(nullable = false)
     private boolean isPrivate = false;
 
-    @ManyToMany
-    @JoinTable( name = "playlist_songs",
-    joinColumns = @JoinColumn(name = "playlist_id"), inverseJoinColumns = @JoinColumn(name = "song_id"))
+    @ManyToMany(cascade = CascadeType.REMOVE)
+    @JoinTable(name = "playlist_songs", joinColumns = @JoinColumn(name = "playlist_id"),
+            inverseJoinColumns = @JoinColumn(name = "song_id")
+    )
     private Set<Song> songs = new HashSet<>();
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(name = "fk_playlists_user"))
+    @JoinColumn(name = "user_id",
+            nullable = false, referencedColumnName = "id",
+            foreignKey = @ForeignKey(name = "fk_playlists_user"))
     private User user;
 }

@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -44,7 +45,7 @@ public class SongService implements ISongService {
         Genre genre = iGenreRepository.findById(songDto.genreId()).orElseThrow(
                 () -> new NotFoundException("genre not found"));
         Song song = Mapper.MapToSong(songDto);
-        song.setAddedAt(Date.valueOf(LocalDate.now()));
+        song.setAddedAt(Date.from(Instant.now()));
         song.setGenre(genre);
 
         Playlist playlist = playListRepository.getReferenceById(songDto.playlistId());

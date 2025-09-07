@@ -68,7 +68,8 @@ public class UserService implements IUserService {
         User savedUser = userRepository.save(newUser);
 
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(savedUser.getUsername());
-        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails,
+                null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String accessToken = jwtProvider.generateToken(authentication);
@@ -194,7 +195,9 @@ public class UserService implements IUserService {
         user.setUsername(updateUsernameDto.username());
         userRepository.save(user);
 
-        Authentication auth = new UsernamePasswordAuthenticationToken(user.getUsername(), null, user.getAuthorities());
+        Authentication auth = new UsernamePasswordAuthenticationToken(
+                user.getUsername(), null, user.getAuthorities()
+        );
         return jwtProvider.generateToken(auth);
     }
 

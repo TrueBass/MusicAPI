@@ -13,11 +13,8 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name="users")
-@Setter
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Setter @Getter @Builder
+@NoArgsConstructor @AllArgsConstructor
 public class User implements UserDetails {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
@@ -35,21 +32,25 @@ public class User implements UserDetails {
     int socialCredit = 0;
     boolean isBanned = false;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,
+            orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Playlist> playlists;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Like> likedSongs = new HashSet<>();
     
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "user",
+            cascade = CascadeType.ALL, orphanRemoval = true)
     private RefreshToken refreshToken;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToMany(fetch = FetchType.EAGER,
+    cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
-            foreignKey = @ForeignKey(name="fk_userroles_user"),
-            inverseForeignKey = @ForeignKey(name="fk_userroles_role"))
+    joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+    inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
+    foreignKey = @ForeignKey(name="fk_userroles_user"),
+    inverseForeignKey = @ForeignKey(name="fk_userroles_role"))
     private Set<Role> roles = new HashSet<>();
 
     @Override

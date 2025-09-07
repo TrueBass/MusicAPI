@@ -41,7 +41,4 @@ public class RefreshTokenService implements IRefreshTokenService {
 
         return refreshToken;
     }
-
-
-    //TODO Add refresh token validation
 }

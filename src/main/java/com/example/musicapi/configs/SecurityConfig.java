@@ -36,38 +36,44 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthEntryPoint authEntryPoint) throws Exception {
         http.cors(Customizer.withDefaults())
-                .csrf(AbstractHttpConfigurer::disable)
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint))
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/music-api/users/signup",
-                                "/music-api/users/login",
-                                "/music-api/users/refresh",
-                                "/music-api/users/logout",
-                                "/music-api/users/update-password",
-                                "/music-api/users/update-username",
-                                "/music-api/users/update-email",
-                                "/music-api/users/update-social-credit",
-                                "/music-api/users/{username}",
-                                "/music-api/songs/add",
-                                "/music-api/songs/{id}",
-                                "/music-api/songs/search",
-                                "/music-api/songs/bytes/{songId}",
-                                "/music-api/songs/info/all/{playerId}",
-                                "/music-api/songs/popular/all",
-                                "/music-api/songs/top10",
-                                "/music-api/playlist/create",
-                                "/music-api/playlist/get-all",
-                                "/music-api/playlist/delete",
-                                "/music-api/playlist/change-visibility").permitAll()
-                        .anyRequest().authenticated()
-                );
-//                .httpBasic(Customizer.withDefaults());
+        .csrf(AbstractHttpConfigurer::disable)
+        .exceptionHandling(
+        exception -> exception.authenticationEntryPoint(authEntryPoint)
+        )
+        .sessionManagement(
+        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        )
+        .authorizeHttpRequests(auth -> auth
+             .requestMatchers(
+                     "/music-api/users/signup",
+                     "/music-api/users/login",
+                     "/music-api/users/refresh",
+                     "/music-api/users/{username}",
+                     "/music-api/songs/search",
+                     "/music-api/songs/{id}",
+                     "/music-api/songs/bytes/{songId}",
+                     "/music-api/songs/info/all/{playerId}",
+                     "/music-api/songs/popular/all",
+                     "/music-api/playlist/get-all"
+             ).permitAll()
+             .requestMatchers(
+                     "/music-api/users/logout",
+                     "/music-api/users/update-password",
+                     "/music-api/users/update-username",
+                     "/music-api/users/update-email",
+                     "/music-api/users/update-social-credit",
+                     "/music-api/songs/add",
+                     "/music-api/songs/top5",
+                     "/music-api/playlist/create",
+                     "/music-api/playlist/delete",
+                     "/music-api/playlist/change-visibility"
+             ).authenticated()
+             .anyRequest().authenticated()
+        );
 
-        http.addFilterBefore(jwtAuthFilter(jwtProvider, customUserDetailsService), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(
+                jwtAuthFilter(jwtProvider, customUserDetailsService),
+                UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

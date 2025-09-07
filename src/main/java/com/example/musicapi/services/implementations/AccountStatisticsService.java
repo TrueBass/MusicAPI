@@ -24,7 +24,8 @@ public class AccountStatisticsService implements IAccountStatisticsService {
   @Override
   public AccountStatsDto getAccountStats(Long userId) {
 
-    User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found."));
+    User user = userRepository.findById(userId).orElseThrow(
+            () -> new NotFoundException("User not found."));
     List<SongInfoLikeDto> allUserSongs = songRepository.getAllSongsOfUser(userId);
 
     long numOfPlaylists = user.getPlaylists().size();
@@ -40,7 +41,8 @@ public class AccountStatisticsService implements IAccountStatisticsService {
     AccountStatsDto accountStatsDto = new AccountStatsDto(numOfPlaylists, numberOfSongs);
     accountStatsDto.setTotalLikes(totalLikes);
     accountStatsDto.setAvgLikesPerSong(Math.round(avgLikesPerSong * 100.0) / 100.0);
-    accountStatsDto.setPlaylistSummary(largestPlaylist.getTitle(),  largestPlaylist.getSongs().size());
+    accountStatsDto.setPlaylistSummary(largestPlaylist.getTitle(),
+            largestPlaylist.getSongs().size());
     return accountStatsDto;
   }
 }

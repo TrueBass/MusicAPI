@@ -47,24 +47,15 @@ public class DatabaseSeeder {
             return;
         }
 
-        var user = User.builder()
-                .username(username)
-                .email(email)
-                .password(passwordEncoder.encode(rawPassword))
-                .socialCredit(socialCredit)
-                .roles(new HashSet<>())
-                .build();
+        var user = User.builder().username(username)
+                .email(email).password(passwordEncoder.encode(rawPassword))
+                .socialCredit(socialCredit).roles(new HashSet<>()).build();
 
         var roleName = role.name();
         var specifiedRole = roleRepository.findByName(roleName);
         var defaultRole = roleRepository.findByName(UserRoles.USER.name());
 
-        if (specifiedRole.isEmpty()) {
-            System.out.println("Skipped seeding user: " + username + ", specified role is not found: " + roleName);
-            return;
-        }
-        if (defaultRole.isEmpty()) {
-            System.out.println("Skipped seeding user: " + username + ", default role is not found: " + roleName);
+        if (specifiedRole.isEmpty() || defaultRole.isEmpty()) {
             return;
         }
         if (role != UserRoles.USER) {
@@ -77,10 +68,8 @@ public class DatabaseSeeder {
 
     private void seedRole(UserRoles role) {
         var roleName = role.name();
-        if (roleRepository.findByName(roleName).isPresent()) {
-            System.out.println("Skipped seeding role: " + roleName);
+        if (roleRepository.findByName(roleName).isPresent())
             return;
-        }
 
         Role userRole = new Role();
         userRole.setName(roleName);

@@ -48,7 +48,7 @@ public interface ISongRepository extends JpaRepository<Song, Long> {
             "SIZE(s.likes), " +
             "s.duration, " +
             "s.genre.id) " +
-            "FROM Song s JOIN s.playlists p " + // JOIN through the collection
+            "FROM Song s JOIN s.playlists p " +
             "WHERE p.id = :playlistId")
     List<SongInfoDto> getAllWithoutData(@Param("playlistId") Long playlistId);
 
@@ -92,7 +92,7 @@ public interface ISongRepository extends JpaRepository<Song, Long> {
     FROM Song s
     JOIN s.playlists p
     WHERE (:cursor IS NULL OR s.id > :cursor)
-    ORDER BY SIZE(s.likes) DESC, s.id ASC""") // s.id ASC is for tie-breaking
+    ORDER BY SIZE(s.likes) DESC, s.id ASC""")
     List<SongInfoLikeDto> getAllPopularPage(
             @Param("userId") Long userId,
             @Param("cursor") Long cursor,

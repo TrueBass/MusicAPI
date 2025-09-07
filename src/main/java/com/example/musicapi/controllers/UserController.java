@@ -24,7 +24,9 @@ public class UserController {
     }
     
     @PostMapping("/signup")
-    public ResponseEntity<ResponseTokenDto> signup(@RequestBody @Valid UserAuthDto userDto) {
+    public ResponseEntity<ResponseTokenDto> signup(
+            @RequestBody @Valid UserAuthDto userDto
+    ) {
         var token = userService.registerUser(userDto);
         return new ResponseEntity<>(token, HttpStatus.CREATED);
     }
@@ -54,7 +56,8 @@ public class UserController {
     }
 
     @PutMapping("/update-username")
-    public ResponseEntity<String> updateUsername(@RequestBody @Valid UpdateUsernameDto updateUsernameDto) {
+    public ResponseEntity<String> updateUsername(
+            @RequestBody @Valid UpdateUsernameDto updateUsernameDto) {
         String token = userService.updateUsername(updateUsernameDto);
         return ResponseEntity.ok(token);
     }

@@ -18,7 +18,7 @@ public class SongInfoLikeDto {
   String title;
   String author;
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-  @JsonFormat(pattern = "dd-MM-yyyy")
+  @JsonFormat(pattern = "dd-MM-yyyy", locale = "pl")
   Date addedAt;
   int likes;
   Long duration;

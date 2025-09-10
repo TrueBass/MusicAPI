@@ -29,5 +29,5 @@ public class Like {
   private Song song;
 
   @Column(nullable = false)
-  private Date likedAt = new Date(); // Optional: track when user liked the song
+  private Date likedAt = new Date();
 }

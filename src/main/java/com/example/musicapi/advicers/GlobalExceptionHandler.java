@@ -27,17 +27,17 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidPasswordException.class)
     public ResponseEntity<Map<String, Object>> handleInvalidPasswordException(InvalidPasswordException ex) {
-        return buildErrorResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED, null); // Status 401
+        return buildErrorResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED, null);
     }
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleNotFoundException(NotFoundException ex) {
-        return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND, null); // Status 404
+        return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND, null);
     }
 
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<Map<String, Object>> handleUnauthorizedException(UnauthorizedException ex) {
-        return buildErrorResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED, null); // Status 401
+        return buildErrorResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED, null);
     }
 
     @ExceptionHandler(UsernameAlreadyTakenException.class)

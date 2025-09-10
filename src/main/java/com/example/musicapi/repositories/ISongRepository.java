@@ -27,14 +27,15 @@ public interface ISongRepository extends JpaRepository<Song, Long> {
             s.genre.id,
             false, p.user.username)
         FROM Song s JOIN s.playlists p
-        WHERE LOWER(CONCAT(s.title, ' - ', s.author)) LIKE LOWER(CONCAT('%', :query, '%'))
+        WHERE LOWER(CONCAT(s.title, ' - ', s.author)) LIKE LOWER(CONCAT('%', :query, '%')) AND NOT p.isPrivate
         ORDER BY SIZE(s.likes) DESC
     """)
     List<SongInfoLikeDto> findSongByQuery(@Param("query") String query);
 
     @Query(value = """
-           SELECT CONCAT(s.title, ' - ', s.author) FROM songs s
-           WHERE LOWER(CONCAT(s.title, ' - ', s.author)) LIKE LOWER(CONCAT('%', :query, '%'))
+           SELECT CONCAT(s.title, ' - ', s.author)
+            FROM songs s JOIN playlist_songs ps ON s.id = ps.song_id JOIN playlists p on p.id = ps.playlist_id
+           WHERE LOWER(CONCAT(s.title, ' - ', s.author)) LIKE LOWER(CONCAT('%', :query, '%')) AND NOT p.is_private
            LIMIT 6
     """,  nativeQuery = true)
     List<String> searchByTitleAuthor(@Param("query") String query);
@@ -91,7 +92,7 @@ public interface ISongRepository extends JpaRepository<Song, Long> {
     p.user.username)
     FROM Song s
     JOIN s.playlists p
-    WHERE (:cursor IS NULL OR s.id > :cursor)
+    WHERE (:cursor IS NULL OR s.id > :cursor) AND NOT p.isPrivate
     ORDER BY SIZE(s.likes) DESC, s.id ASC""")
     List<SongInfoLikeDto> getAllPopularPage(
             @Param("userId") Long userId,

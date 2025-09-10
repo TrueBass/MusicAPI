@@ -55,7 +55,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        // locked functionality is not needed in this project.
+        // locked functionality is not needed
         return true;
     }
 
@@ -78,7 +78,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        // account expiration functionality is not needed in this project.
+        // account expiration functionality is not needed
         return true;
     }
 }

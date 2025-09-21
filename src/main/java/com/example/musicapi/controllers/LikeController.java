@@ -16,7 +16,6 @@ public class LikeController {
 
   @PostMapping("/like")
   public ResponseEntity<String> like(@RequestBody LikeDto likeDto) {
-    System.out.println(likeDto.toString());
     likeService.likeSong(likeDto.userId(), likeDto.songId());
     return ResponseEntity.ok("Liked");
   }
